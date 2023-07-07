@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" integrity="sha512-PgQMlq+nqFLV4ylk1gwUOgm6CtIIXkKwaIHp/PAIWHzig/lKZSEGKEysh0TCVbHJXCLN7WetD8TFecIky75ZfQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<!-- <body>
+    <div id="quotes"></div>
+    <div id="author"></div>
+    <button id="newQ">new Quotes</button>
+<button id="tweetMe">Tweet</button> -->
+
+<div class="container">
+    <div class="inner">
+        <div class="box">
+            <p class="number">
+                <img src="tweet.jfif" alt="tweetMe" title="TweetMe" id="tweetMe">
+            </p>
+            <div class="text">
+            <i class="start-quote fas fa-quote-left"></i>
+            <p id="quotes" class="quote" ></p>
+            <p id="author" class="author"></p>
+            </div>
+
+<label class="button">
+    <p id="newQ">new Quotes</p>
+</label>
+ 
+        </div>
+    </div>
+</div>
+
+
+
+
+    <script>
+const quotes = document.getElementById("quotes")
+const author = document.getElementById("author")
+const newQ = document.getElementById("newQ")
+const tweetMe = document.getElementById("tweetMe")
+
+let realData = "";
+let quotesData =""
+
+// yeh web intnet url  page  me se li gayee link hai tweeter k aaur uske aage ek query dali ?text=   jisase jo bhi ham twitter pe bhej rahe hai vo vaha text roop me milega
+const tweetNow = ()=>{
+    let tweetPost = `https://twitter.com/intent/tweet?text=${quotesData.text} ${quotesData.author}`;
+    window.open(tweetPost)
+}
+
+// hame hamesha ek random number generate karan hoga jisse ham random quotes aaur uske author milenge
+const getNewQuotes = () => {
+    // yaha niche humne random number generate kiya math.random number se usko *10 kiya qki jo random numbe rmilta hai.. vo 0to 1 k beech ka milta hai.. jisse hame number 1 to 10 ke beech ka milega .. but ye whole number nshi milega esliye hamne math.floor ko call kiya jisse jo bhi random number milega vo whole number hoga
+    let rnum = Math.floor(Math.random() * 100 ) ;
+    // console.log(rnum)
+    // console.log(realData[10].author);
+    // connocting rnum with realData in quotesdata
+    quotesData = realData[rnum]
+    // html data ko real data se change kiya
+    quotes.innerText = `${quotesData.text}`;
+    author.innerText = `${quotesData.author}`;
+// next three line simple if else hai agar data null hai ti to unknown nahito jaisas hai vaisa
+    quotesData.author == null 
+    ? (author.innerText = "unKnown")
+    : (author.innerText = `${quotesData.author}`)
+}
+
+const getQuotes = async () =>{
+//ye hamara api link jahase hame data fetch karna hai
+const api = "https://type.fit/api/quotes";
+// hame jo fetching ka code hai ham use try and catch block me likhenge
+try { 
+//    await esliye likhte hai q ki jaha kahi pe bhi data aa raha hota hai vaha hame await likhana hota hai
+let data = await fetch(api);
+realData = await data.json();//hamne jo data aaya tha use jason k object me bana ke realData me le liya
+
+getNewQuotes();
+// console.log(realData[10].text);
+// console.log(realData[10].author);
+}
+catch (error){
+
+}
+
+        }
+
+// adding eventlistner for new tweet
+        tweetMe.addEventListener('click' , tweetNow)
+// adding eventlistner for new quote
+       newQ.addEventListener('click' , getNewQuotes)
+       getQuotes();
+    </script>
+</body>
+</html>
